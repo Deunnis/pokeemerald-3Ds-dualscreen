@@ -4107,6 +4107,10 @@ SPECS = [
             # the Battle Frontier paves its walks with the same stones: a
             # floor to walk on, not a curb
             "skip": ("LAYOUT_BATTLE_FRONTIER_OUTSIDE_WEST", "LAYOUT_BATTLE_FRONTIER_OUTSIDE_EAST"),
+            # and the plain top alone, with no lawn beside it, is a town's
+            # paving: Rustboro's and Mauville's crossings and Mauville's north
+            # road, the Frontier's reception gate - walked on, not stepped over
+            "paving": {0x05E},
         },
         # every cell as the map paints it under the slabs: one ground for a
         # whole run laid paving over the lawn drawn beside it (Slateport's

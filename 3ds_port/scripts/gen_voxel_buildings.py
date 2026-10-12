@@ -51,6 +51,8 @@ def component_specs(spec, layouts):
     metatiles of a primary tileset, every layout on that primary)."""
     comp = spec["components"]
     tiles = comp["tiles"]
+    paving = comp.get("paving", set())
+    ground = set(spec.get("ground", ()))
     layouts_json = json.load(open(os.path.join(vb.ROOT, "data", "layouts", "layouts.json"),
                                   encoding="utf-8"))["layouts"]
     out = []
@@ -76,6 +78,13 @@ def component_specs(spec, layouts):
                                 and (blocks[ny * w + nx] & 0x3FF) in tiles):
                             seen.add((nx, ny))
                             todo.append((nx, ny))
+                # a run of `paving` tiles alone that no `ground` tile touches
+                # is a floor drawn with the object's tiles: no model
+                if paving and all((blocks[cy * w + cx] & 0x3FF) in paving for cx, cy in cells) \
+                        and not any(0 <= nx < w and 0 <= ny < h and (blocks[ny * w + nx] & 0x3FF) in ground
+                                    for cx, cy in cells
+                                    for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1))):
+                    continue
                 pieces = [cells]
                 size = comp.get("block")
                 if size:
